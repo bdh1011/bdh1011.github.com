@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>DNS Terminology, Components, Concepts 소개</title>
+  <meta name="description" content="An Introduction to DNS Terminology, Components, and Concepts">
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="http://localhost:4000/jekyll/update/2016/10/25/dns.html">
+  <link rel="alternate" type="application/rss+xml" title="whiteUnicorn" href="/feed.xml">
+  
+  
+</head>
+
+
+  <body>
+
+    <header class="site-header" role="banner">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">whiteUnicorn</a>
+
+    <nav class="site-nav">
+      <span class="menu-icon">
+        <svg viewBox="0 0 18 15" width="18px" height="15px">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </span>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">DNS Terminology, Components, Concepts 소개</h1>
+    <p class="post-meta"><time datetime="2016-10-25T13:19:30+09:00" itemprop="datePublished">Oct 25, 2016</time></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <h1 id="an-introduction-to-dns-terminology-components-and-concepts">An Introduction to DNS Terminology, Components, and Concepts</h1>
+
+<h2 id="section">소개</h2>
+
+<p>DNS(Domain Name Server)는 웹사이트와 서버를 설정하는데 있어서 꽤 어려운 분야입니다. DNS가 어떻게 동작하는지 이해하는 것은 여러분의 웹서아트에 접근하는 방법을 설정하여 문제를 진단하고 내부에서 어떻게 동작하는지에 대한 이해를 넓혀줄 것입니다.</p>
+
+<p>이 가이드에서는 여러분의 DNS 설정을 통해 실행하여 기본적인 DNS 개념에 대해 논의해보려 합니다. 가이드에 대한 습득이 끝나면 DigitalOcean에서 여러분의 도메인네임을 설정하거나 여러분의 DNS server 설정을 할 준비가 될 것입니다.</p>
+
+<p>여러분의 도메인을 결정하고 control panel에서 우리의 도메인을 설정하기 위해 여러분 서버를 설정하기 전에 기본적으로 실제 어떻게 동작하는지에 대해 알아보도록 합시다.</p>
+
+<h2 id="section-1">도메인 용어</h2>
+
+<p>용어에 대한 정의를 먼저 하겠습니다. 다른데서 익숙하게 쓰이는 용어들이 있긴 하지만 도메인 네임과 DNS에 대해 얘기할 때 자주 사용되지 않는 용어들도 많이 있습니다.</p>
+
+<h3 id="domain-name-system">도메인 네임 시스템(Domain Name System)</h3>
+
+<p>DNS라고 잘 알려져 있는 도메인 네임 시스템은 사람에게 친숙한 이름으로 고유한 주소를 결정하게 하는 네트워킹 시스템입니다.</p>
+
+<h3 id="domain-name">도메인 네임(Domain Name)</h3>
+
+<p>도메인 네임은 인터넷 자원과 연관시키는데 사용되는 사람에게 친숙한 이름입니다. 예를 들어 “google.com”이 도메인 이름에 해당합니다. 일부 사람들은 “google” 부분이 도메인에 해당한다고하지만, 일반적으로 합친 것도 도메인 이름이라고 할 수 있습니다.</p>
+
+<p>URL “google.com”은 Google 회사 소유의 서버와 연관되어있습니다. 이 도메인 이름은 우리가 브라우저에 “google.com”라고 입력했을 때 구글 서버에 접속할 수 있게 해줍니다.</p>
+
+<h3 id="ip-">IP 주소</h3>
+
+<p>IP 주소는 우리가 접속가능한 네트워크 장소라고 얘기하는 것입니다. 각각의 IP 주소는 해당 네트워크에서 고유해야합니다. 우리가 웹사이트에 대해 얘기할 때 여기에 해당하는 네트워크는 전체 인터넷에 해당합니다.</p>
+
+<p>일반적인 형태인 IPv4는 최대 3개의 숫자가 있는 4개의 집합으로 점(.)을 경계로 나뉘어져 쓰입니다. 예를들어 “111.222.111.222”은 유효한 IPv4 IP 주소입니다. DNS에서 우리는 이름을 이 주소에 매핑시킴으로써 네트워크에서 접속하고 싶은 곳들의 복잡한 숫자 집합들을 기억하고 있지 않아도 됩니다.</p>
+
+<h3 id="top-level-domain">최상위 도메인(Top-Level Domain)</h3>
+
+<p>최상위 도메인(Top-Level Domain : TLD)은 도메인에 가장 일반적인 부분입니다. 최상위 도메인은 점(.)으로 나눠진 가장 오른쪽에 있는 부분입니다. 보통 최상위 도메인으로는 “com”, “net”, “org”, “gov”, “edu”, “io” 등이 있습니다.</p>
+
+<p>최상위 도메인은 도메인 이름의 가장 최상위 계층에 있습니다. 몇몇 단체들은 ICANN (Internet Corporation for Assigned names and Numbers)에 의해 최상위 도메인을 관리합니다. 이 단체들은 보통 도메인 등록자들을 통해 TLD 도메인을 배포합니다.</p>
+
+<h3 id="hosts">호스트(Hosts)</h3>
+
+<p>도메인에서 도메인 소유자는 도메인을 통해 컴퓨터나 서비스로의 접속을 분리하는 각각의 hosts를 정의할 수 있습니다. 예를 들어, 대부분의 도메인 소유자는 그냥 도메인(example.com)을 이용하여 자신의 웹서버로 접속할 수 있게 만들면서 “www”를 “host”로 해서도 접속할 수 있게 합니다.</p>
+
+<p>일반적인 도메인 밑에 다른 host를 가질 수 있습니다. “api” host를 통해 API 접속을 할 수도 있으며 “ftp”나 “files” (ftp.example.com / files.example.com)을 통해 ftp 접속을 할 수도 있습니다. host 이름은 해당 도메인에서 고유한 범위에서 임의로 정할 수 있습니다.</p>
+
+<h3 id="subdomain">서브도메인(SubDomain)</h3>
+
+<p>호스트에 연관된 주제가 서브도메인입니다.</p>
+
+<p>DNS는 계층적으로 동작합니다. TLD가 그 하위에 여러 도메인들을 가지고 있을 수 있는데, 예를 들어 “com” TLD는 “google.com”, “ubuntu.com”을 가지고 있습니다. “subdomain”은 좀 더 큰 도메인의 부분이라는 의마입니다. 예를 들어, “ubuntu.com”은 “com”의 서브도메인입니다. 이때는 보통 도메인으로 불리거나 “ubuntu” 부분을 SLD(Second Level Domain)으로 지칭합니다.</p>
+
+<p>비슷하게 각 도메인은 “subdomain”들을 그 하위에 조정할 수 있습니다. 이들이 보통 우리가 의미하는 서브도메인입니다. 예를 들어, 학교의 역사 부서를 “www.history.school.edu”로 가질 수 있습니다. 여기서 “history” 부분이 서브도메인입니다.</p>
+
+<p>호스트 네임과 서브도메인의 차이는 호스트는 컴퓨터나 자원을 정의하는데 반하여 서브도메인은 부모 도메인을 확장합니다. 이는 도메인을 세부적으로 나누는 방법입니다.</p>
+
+<p>서브도메인이나 호스트에 대해 얘기할 때, 도메인의 가장 왼쪽 부분이 가장 세부적이라고 볼 수 있습니다. 왼쪽에서 오른쪽으로 읽는 것은 가장 세부적인 부분부터 읽는 것이 되며 이것이 DNS가 동작하는 원리입니다.</p>
+
+<h3 id="fqdnfully-qualified-domain-name">FQDN(Fully Qualified Domain Name)</h3>
+
+<p>FQDN은 보통 우리가 절대 도메인 네임(absolue domain name)이라고 부르는 것입니다. DNS 시스템에서 도메인은 서로 관계되거나 애매해질 수 있습니다. FQDN은 도메인 네임 시스템의 루트에서 그 위치를 세부적으로 열거한 절대적 이름입니다.</p>
+
+<p>이는 TLD를 포함한 부모 도메인까지 열고하는 것을 의미합니다. 적합한 FQDN는 DNS 계층의 루트를 가리키는 점(.)으로 끝나게 됩니다. 예를 들어 “mail.google.com.”이 있습니다. 종종 FQDN을 필요로 하는 소프트웨어는 끝에 점(.)을 필요로 하지는 않지만 ICANN 표준에서는 필요로 합니다.</p>
+
+<h3 id="name-server">네임서버(Name Server)</h3>
+
+<p>네임서버는 도메인 네임을 IP 주소로 바꿔주도록 의도된 컴퓨터입니다. 이들 서버는 DNS 시스템의 대부분의 일을 담당합니다. 하나의 서버에서 모든 도메인 변환을 해주기엔 너무 많기에 각 서버는 다른 네임 서버로 리다이렉트해주거나 하위 서브도메인에 해당하는 네임서버에게 변환을 위임합니다.</p>
+
+<p>네임서버는 “authoritative” 할 수 있습니다. 이는 그 네임서버의 권한 안에 있는 도메인에 대한 쿼리에는 답변을 주는 것을 의미합니다. 그렇지 않으면 네임서버는 다른 서버를 가리키고 다른 네임서버의 데이터를 캐시하게 됩니다.</p>
+
+<h3 id="zone-file">Zone File</h3>
+
+<p>Zone file은 도메인 이름과 IP 주소들을 매핑한 간단한 텍스트 파일입니다. 이는 DNS 시스템이 최종적으로 사용자가 요청한 도메인 네임에 맞는 IP 주소를 반환하는 방법입니다.</p>
+
+<p>Zone files은 네임 서버 안에 있으면서 특정 도메인 아래에 가능하거나 네임서버가 정보를 가지고 올 수 있는 장소에 대한 자원들을 정의한다.</p>
+
+<h3 id="records">Records</h3>
+
+<p>Zone file에서 레코드들은 유지됩니다. 이 간단한 형식에서 하나의 레코드는 기본적으로 자원과 이름의 연결입니다. 레코드들은 도메인 네임을 IP 주소로 이어주고 도메인의 네임서버, 메일 서버 등을 정의합니다.</p>
+
+<p>영문 원본 출처 : https://www.digitalocean.com/community/tutorials/an-introduction-to-dns-terminology-components-and-concepts</p>
+
+
+  </div>
+
+  
+</article>
+
+      </div>
+    </main>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">whiteUnicorn</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>
+            
+              whiteUnicorn
+            
+            </li>
+            
+            <li><a href="mailto:bdh931101@gmail.com.com">bdh931101@gmail.com.com</a></li>
+            
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/jekyll"><span class="icon icon--github"><svg viewBox="0 0 16 16" width="16px" height="16px"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">jekyll</span></a>
+
+          </li>
+          
+
+          
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>메모용입니다.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>
