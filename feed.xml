@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="http://localhost:4000/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2016-10-25T16:00:28+09:00</updated><id>http://localhost:4000//</id><title type="html">whiteUnicorn</title><subtitle>메모용입니다.
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="http://localhost:4000/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2016-10-26T14:11:57+09:00</updated><id>http://localhost:4000//</id><title type="html">whiteUnicorn</title><subtitle>메모용입니다.
 </subtitle><entry><title type="html">DNS Terminology, Components, Concepts 소개</title><link href="http://localhost:4000/jekyll/update/2016/10/25/dns.html" rel="alternate" type="text/html" title="DNS Terminology, Components, Concepts 소개" /><published>2016-10-25T13:19:30+09:00</published><updated>2016-10-25T13:19:30+09:00</updated><id>http://localhost:4000/jekyll/update/2016/10/25/dns</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2016/10/25/dns.html">&lt;h1 id=&quot;an-introduction-to-dns-terminology-components-and-concepts&quot;&gt;An Introduction to DNS Terminology, Components, and Concepts&lt;/h1&gt;
 
 &lt;h2 id=&quot;section&quot;&gt;소개&lt;/h2&gt;
@@ -75,4 +75,72 @@
 
 &lt;p&gt;Zone file에서 레코드들은 유지됩니다. 이 간단한 형식에서 하나의 레코드는 기본적으로 자원과 이름의 연결입니다. 레코드들은 도메인 네임을 IP 주소로 이어주고 도메인의 네임서버, 메일 서버 등을 정의합니다.&lt;/p&gt;
 
-&lt;p&gt;영문 원본 출처 : https://www.digitalocean.com/community/tutorials/an-introduction-to-dns-terminology-components-and-concepts&lt;/p&gt;</content><summary type="html">An Introduction to DNS Terminology, Components, and Concepts</summary></entry></feed>
+&lt;h2 id=&quot;dns--&quot;&gt;DNS가 어떻게 동작하는가?&lt;/h2&gt;
+
+&lt;p&gt;이제 우리는 DNS와 연관된 용어들에 대해서 익숙해졌습니다. 그러면 이 시스템이 실제로 어떻게 동작할까요?&lt;/p&gt;
+
+&lt;p&gt;DNS 시스템은 상위 계층에서 봤을 때는 정말 단순하지만 자세하게 보면 정말 복잡합니다. 하지만 전반적으로 우리가 아는것처럼 인터넷에서 필수적인 매우 신뢰성있는 기반 구조입니다.&lt;/p&gt;
+
+&lt;h3 id=&quot;root-servers&quot;&gt;루트 서버(Root Servers)&lt;/h3&gt;
+
+&lt;p&gt;위에서 언급했다시피 DNS 핵심은 계층 시스템입니다. 시스템의 최상위는 “root servers”로 알려져 있습니다. 이 서버들은 ICANN(Internet Corporation for Assigned Nameds and Numbers) 에게 위임받은 여러 단체가 관리하고 있습니다.&lt;/p&gt;
+
+&lt;p&gt;현재 13개의 루트서버가 동작하고 있지만 이들은 매분 정말 어마어마한 수의 네임들을 결정지어줘야 하기 때문에 각각의 루트 서버는 실제 미러되어있습니다. 이런한 구조에서 흥미로운 점은 각각 루트 서버와 미러 서버는 같은 IP를 공유한다는 것입니다. 요청이 특정 루트 서버에게 전달될때, 요청은 로트 서버에서 가장 가까운 미러 서버로 라우트 될 것 입니다.&lt;/p&gt;
+
+&lt;p&gt;그러면 루트 서버의 역할은 무엇인가 하면, 루트 서버는 최상위 도메인에 대한 정보 요청을 처리합니다. 만약 낮은 계층의 네임서버가 결정할 수 없는 요청이 들어온다면 해당 도메인에 대한 쿼리가 루트서버로 생성됩니다.&lt;/p&gt;
+
+&lt;p&gt;루트서버는 실제로 도메인이 어디에서 제공되는지 모릅니다. 하지만 루트서버는 실제 최상위계층 도메인 서버를 다루는 네임서버로 전달해줄 수 있습니다.&lt;/p&gt;
+
+&lt;p&gt;만약 “www.wikipedia.org”라는 요청이 루트서버로 생성된다면 루트서버는 레코드에서 결과를 찾았다고 하지 않을 것입니다. 루트서버는 zone files에서 “www.wikipedia.org”와 맞는게 있는지 찾겠지만 찾을 수 없을 것입니다.&lt;/p&gt;
+
+&lt;p&gt;대신에 “org” TLD의 담당 네임서버를 찾아 주소를 담아 요청을 제공하게 됩니다.&lt;/p&gt;
+
+&lt;h2 id=&quot;tld-&quot;&gt;TLD 서버&lt;/h2&gt;
+
+&lt;p&gt;요청자는 루트서버로부터 받은 IP 주소(TLD 담당)에 새로 요청을 보내게 됩니다.&lt;/p&gt;
+
+&lt;p&gt;예시를 계속 진행하자면, “www.wikipedia.org”가 어디있는지 알기 위해 “org” 담당 네임서버로 요청을 보내게 됩니다. “www.wikipedia.org”를 zone files에서 찾아보지만 아마 이 레코드에서는 찾을 수 없을 것입니다. 하지만 “wikipedia.org”에 대한 네임서버 IP 주소는 찾을 수 있을 것입니다. 이로써 우리가 원하는 답에 가까워졌습니다.&lt;/p&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;도메인 단계 네임 서버&lt;/h3&gt;
+
+&lt;p&gt;이 시점에서 요청자는 자원에 대한 실제 IP 주소를 알고 있는 네임서버 IP 주소를 가지게 되었습니다. 여기서 한번 더 네임서버에게 “www.wikipeida.org”를 찾을 수 있는지 묻게 됩니다.&lt;/p&gt;
+
+&lt;p&gt;네임서버는 zone files을 확인하고 “wikipedia.org”와 관련된 zone을 발견합니다. 이 파일 안에 “www” host에 대한 레코드가 있습니다. 레코드는 host가 어디에 있는지에 대한 IP 주소를 말해줍니다. 이로써 네임서버는 최종 답을 요청자에게 보내게 되는 것입니다.&lt;/p&gt;
+
+&lt;h3 id=&quot;resolving---resolving-name-server&quot;&gt;Resolving 네임 서버 (Resolving Name Server)&lt;/h3&gt;
+
+&lt;p&gt;위의 시나리오에서 우리는 “요청자(requester)”를 언급했습니다. 그러면 여기서 요청자는 뭘까요?&lt;/p&gt;
+
+&lt;p&gt;대부분의 경우에 요청자는 “resolving name server”이다. resolving 네임 서버는 다른 서버에 질의를 하도록 설정되어있습니다. 기본적으로 이전 쿼리 결과를 속도 증진을 위해 키시하고 있는 유저와 아직 모르는 “resolve” 요청을 할 수 있도록 루트 서버의 주소를 알고 있는 유저를 중개합니다.&lt;/p&gt;
+
+&lt;p&gt;기본적으로 사용자에게 몇개의 resolving 네임 서버가 각각의 컴퓨터 시스템이 설정되어 있습니다. resolving 네임 서버는 보통 ISP 같은 기관(Google,..)에 의해 제공된다. 물론 여러분의 컴퓨터에서 자동이나 수동으로 설정할 수 있습니다.&lt;/p&gt;
+
+&lt;p&gt;여러분이 브라우저에서 URL을 입력하면 여러분의 컴퓨터는 먼저 자원 위치에 대해 내부적으로 찾습니다. 컴퓨터의 “hosts” 파일을 먼저 확인하고 몇개의 다른 곳을 확인한다. 그리고나서 resolving 네임 서버로 요청을 보내고 자원에 대한 IP가 반환되기를 기다립니다.&lt;/p&gt;
+
+&lt;p&gt;resolving 네임 서버는 캐시를 확인하고 만약 없으면 위에 명시된 과정을 따릅니다.&lt;/p&gt;
+
+&lt;p&gt;Resolving 네임 서버는 기본적으로 end user에게 요청 프로세스를 압축해준다. 클라이언트는 그저 resolving 네임 서버에 자원이 어디에 있는지 묻고 최종적으로 답이 오길 기다리면 됩니다.&lt;/p&gt;
+
+&lt;h3 id=&quot;zone-files&quot;&gt;Zone Files&lt;/h3&gt;
+
+&lt;p&gt;우리는 위에서 “zone files”과 “records”에 대해 언급했습니다.&lt;/p&gt;
+
+&lt;p&gt;Zone files은 그들이 아는 도메인에 대한 정보를 저장하는 수단입니다. 네임 서버가 아는 모든 도메인은 zone file에 저장됩니다. 대부분의 평균적인 네임서버로 들어오는 요청들은 zone file에 있는게 아닐 것입니다.&lt;/p&gt;
+
+&lt;p&gt;resolving 네임 서버처럼 재귀적인 쿼리를 처리하도록 설정되어있다면, 답을 찾아서 반환할 것입니다. 그렇지 않다면 다음으로 어디에 요청을 보낼것인지 알려줄 것입니다.&lt;/p&gt;
+
+&lt;p&gt;네임서버가 더 많은 zone file을 가지고 있을수록, 요청에 대한 authoritatively한 답변이 가능할 것입니다.&lt;/p&gt;
+
+&lt;p&gt;zone file은 기본적으로 전체 DNS 네이밍 시스템의 부분집합인 DNS “zone”을 설명합니다. 보통 하나의 도메인을 설정하기 위해 사용됩니다. 도메인의 자원이 어디에 있는지를 정의하는 여러 레코드를 포함할 수도 있습니다.&lt;/p&gt;
+
+&lt;p&gt;zone의 &lt;code class=&quot;highlighter-rouge&quot;&gt;$ORIGIN&lt;/code&gt;은 zone의 최상위 계층과 동일한 인자입니다.&lt;/p&gt;
+
+&lt;p&gt;그래서 만일 zone file이 “example.com” 도메인을 설정하기 위해 사용된다면, &lt;code class=&quot;highlighter-rouge&quot;&gt;$ORIGIN&lt;/code&gt;은 &lt;code class=&quot;highlighter-rouge&quot;&gt;example.com.&lt;/code&gt;으로 설정될 것입니다.&lt;/p&gt;
+
+&lt;p&gt;zone file의 제일 위에 설정이 되거나 zone file을 참조하는 DNS 서버의 설정 파일에 정의합니다. 어느쪽이든, 이 인자는 zone이 어떤 authoritative가 될 것인지를 정합니다.&lt;/p&gt;
+
+&lt;p&gt;비슷하게 &lt;code class=&quot;highlighter-rouge&quot;&gt;$TTL&lt;/code&gt;은 정보를 제공할 “수명(time to live)”를 설정합니다. 기본적으로 타이머입니다. 캐싱 네임 서버는 이전 쿼리에 대한 답을 TTL값이 다 달때까지 사용될 수 있습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;영문 원본 출처 : &lt;a href=&quot;https://www.digitalocean.com/community/tutorials/an-introduction-to-dns-terminology-components-and-concepts&quot;&gt;https://www.digitalocean.com/community/tutorials/an-introduction-to-dns-terminology-components-and-concepts&lt;/a&gt;&lt;/p&gt;</content><summary type="html">An Introduction to DNS Terminology, Components, and Concepts</summary></entry></feed>
